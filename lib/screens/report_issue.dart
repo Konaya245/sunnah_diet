@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase/firebase.dart' as firebase;
+// import 'package:firebase/firebase.dart' as firebase;
 
 class ReportIssuePage extends StatefulWidget {
   const ReportIssuePage({super.key});
@@ -18,21 +18,21 @@ class _ReportIssuePageState extends State<ReportIssuePage> {
     String email = _emailController.text;
     String phone = _phoneController.text;
 
-    // Connect to Firebase and pass the issue
-    firebase.initializeApp(
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      databaseURL: "YOUR_DATABASE_URL",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-    );
+    // // Connect to Firebase and pass the issue
+    // firebase.initializeApp(
+    //   apiKey: "YOUR_API_KEY",
+    //   authDomain: "YOUR_AUTH_DOMAIN",
+    //   databaseURL: "YOUR_DATABASE_URL",
+    //   projectId: "YOUR_PROJECT_ID",
+    //   storageBucket: "YOUR_STORAGE_BUCKET",
+    // );
 
-    // Save the issue to Firebase
-    firebase.database().ref("issues").push().set({
-      "issue": issue,
-      "email": email,
-      "phone": phone,
-    });
+    // // Save the issue to Firebase
+    // firebase.database().ref("issues").push().set({
+    //   "issue": issue,
+    //   "email": email,
+    //   "phone": phone,
+    // });
 
     // Clear the text fields
     _issueController.clear();

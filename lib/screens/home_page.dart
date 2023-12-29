@@ -1,67 +1,55 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sunnah_diet/auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
-
-  final User? user = Auth().currentUser;
-
-  Future<void> _signOut() async {
-    await Auth().signOut();
-  }
-
-  Widget _title() {
-    return const Text(
-      'Sunnah Dieting App',
-      style: TextStyle(
-        color: Colors.green,
-        decoration: TextDecoration.underline,
-      ),
-    );
-  }
-
-  Widget _userUid() {
-    return Text(
-      user?.email ?? 'User email',
-      style: const TextStyle(
-        color: Colors.green,
-        decoration: TextDecoration.underline,
-      ),
-    );
-  }
-
-  Widget _signOutButton() {
-    return ElevatedButton(
-      onPressed: _signOut,
-      child: const Text('Sign Out'),
-    );
-  }
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: _title(),
-        backgroundColor: Colors.white,
-        actions: [
-          _userUid(),
-          const SizedBox(width: 12),
+      body: Column(
+        children: [
+          Container(
+            color: Colors.grey,
+            child: ListTile(
+              title: const Text('Calories Remaining'),
+              subtitle: const Text('Circular Progress Bar'),
+              onTap: () {
+                Navigator.pushNamed(context, '/food_diary');
+              },
+            ),
+          ),
+          Container(
+            color: Colors.grey,
+            child: ListTile(
+              title: const Text('Cups of Water Drunk'),
+              subtitle: const Text('Circular Progress Bar'),
+              onTap: () {
+                Navigator.pushNamed(context, '/food_diary');
+              },
+            ),
+          ),
+          Container(
+            color: Colors.grey,
+            child: ListTile(
+              title: const Text('Daily Sunnah Food'),
+              subtitle: const Text('Random Item'),
+              onTap: () {
+                // Handle onTap for Daily Sunnah Food
+              },
+            ),
+          ),
+          Container(
+            color: Colors.grey,
+            child: ListTile(
+              title: const Text('Daily Sunnah Habit'),
+              subtitle: const Text('Random Item'),
+              onTap: () {
+                // Handle onTap for Daily Sunnah Habit
+              },
+            ),
+          ),
         ],
       ),
-      body: Container(
-          alignment: Alignment.center,
-          height: double.infinity,
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _userUid(),
-              _signOutButton(),
-            ],
-          )),
     );
   }
 }

@@ -1,8 +1,8 @@
 // Importing necessary packages and files
 import 'package:sunnah_diet/auth.dart';
-import 'package:sunnah_diet/screens/home_page.dart';
 import 'package:sunnah_diet/screens/login_register.dart';
 import 'package:flutter/material.dart';
+import 'package:sunnah_diet/nav_bar.dart';
 
 // Defining a StatefulWidget called WidgetTree
 class WidgetTree extends StatefulWidget {
@@ -22,11 +22,11 @@ class _WidgetTreeState extends State<WidgetTree> {
           .authStateChanges, // Listening to the authentication state changes
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          // If user is authenticated, show the HomePage widget
-          return HomePage();
+          // If user is authenticated, show the NavBar widget
+          return const NavBar();
         } else {
           // If user is not authenticated, show the LoginPage widget
-          return LoginPage();
+          return const LoginPage();
         }
       },
     );

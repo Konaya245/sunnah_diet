@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../auth.dart';
+import 'package:sunnah_diet/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -74,7 +74,9 @@ class _LoginPageState extends State<LoginPage> {
   Widget _submitButton() {
     return ElevatedButton(
       onPressed: () {
-        isLogin ? signInWithEmailAndPassword : createUserWithEmailAndPassword;
+        isLogin
+            ? signInWithEmailAndPassword()
+            : createUserWithEmailAndPassword();
       },
       child: Text(isLogin ? 'Login' : 'Sign Up'),
     );

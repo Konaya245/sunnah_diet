@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sunnah_diet/screens/settings/privacy_policy.dart';
+import 'package:sunnah_diet/screens/settings/terms_and_conditions.dart';
+import 'package:sunnah_diet/screens/settings/notification.dart';
+import 'package:sunnah_diet/screens/settings/account_management.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -15,35 +19,36 @@ class SettingsPage extends StatelessWidget {
             title: const Text('Account Management'),
             onTap: () {
               // Navigate to the account management page
-              Navigator.pushNamed(context, 'settings/account_management');
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const AccountManagementPage();
+              }));
             },
           ),
           ListTile(
             title: const Text('Notification'),
             onTap: () {
               // Navigate to the notification page
-              Navigator.pushNamed(context, 'settings/notification');
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const NotificationScreen();
+              }));
             },
           ),
           ListTile(
             title: const Text('Privacy Policy'),
             onTap: () {
-              // Navigate to the privacy policy page
-              Navigator.pushNamed(context, 'settings/privacy_policy');
+              // Navigate to the notification page
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const PrivacyPolicyPage();
+              }));
             },
           ),
           ListTile(
             title: const Text('Terms and Conditions'),
             onTap: () {
-              // Navigate to the terms and conditions page
-              Navigator.pushNamed(context, 'settings/terms_and_conditions');
-            },
-          ),
-          ListTile(
-            title: const Text('Report an Issue'),
-            onTap: () {
-              // Navigate to the report an issue page
-              Navigator.pushNamed(context, 'settings/report_issue');
+              // Navigate to the notification page
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const TermsAndConditionsPage();
+              }));
             },
           ),
         ],
