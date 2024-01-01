@@ -9,6 +9,7 @@ class FoodDiaryScreen extends StatefulWidget {
 }
 
 class _FoodDiaryScreenState extends State<FoodDiaryScreen> {
+  bool isPlannerMode = false;
   DateTime selectedDate = DateTime.now();
   int maxCalories = 2000;
   int breakfastCalories = 0;
@@ -49,6 +50,40 @@ class _FoodDiaryScreenState extends State<FoodDiaryScreen> {
     }
   }
 
+  void openMaxCaloriesDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        int newMaxCalories = maxCalories;
+
+        return AlertDialog(
+          title: const Text('Set Max Calories'),
+          content: TextField(
+            keyboardType: TextInputType.number,
+            onChanged: (value) {
+              newMaxCalories = int.tryParse(value) ?? maxCalories;
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                changeCalories(newMaxCalories);
+                Navigator.of(context).pop();
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,8 +114,9 @@ class _FoodDiaryScreenState extends State<FoodDiaryScreen> {
             // Progress Bar
             Container(
               padding: const EdgeInsets.all(6),
+              margin: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
+                color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
@@ -92,17 +128,17 @@ class _FoodDiaryScreenState extends State<FoodDiaryScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('Calories Remaining:'),
-                        SizedBox(
-                          width: 100,
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              hintText: maxCalories.toString(),
+                        Row(
+                          children: [
+                            Text(
+                              maxCalories.toString(),
+                              style: const TextStyle(fontSize: 16),
                             ),
-                            onChanged: (value) {
-                              changeCalories(int.parse(value));
-                            },
-                          ),
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: openMaxCaloriesDialog,
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -121,30 +157,94 @@ class _FoodDiaryScreenState extends State<FoodDiaryScreen> {
               ),
             ),
             // Meal Boxes
-            Container(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Text('Breakfast: $breakfastCalories cal'),
-                  const SizedBox(height: 8),
-                  Text('Lunch: $lunchCalories cal'),
-                  const SizedBox(height: 8),
-                  Text('Dinner: $dinnerCalories cal'),
-                ],
+
+            // Add Food Button
+            SizedBox(
+              width: double.infinity,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text('Breakfast: $breakfastCalories cal'),
+                    const SizedBox(height: 8),
+                    GestureDetector(
+                      onTap: addFoodItem,
+                      child: const Text('+ Add food'),
+                    ),
+                  ],
+                ),
               ),
             ),
-            // Add Food Button
-            Container(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Add food'),
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: addFoodItem,
-                  ),
-                ],
+            SizedBox(
+              width: double.infinity,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text('Lunch: $lunchCalories cal'),
+                    const SizedBox(height: 8),
+                    GestureDetector(
+                      onTap: addFoodItem,
+                      child: const Text('+ Add food'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text('Dinner: $dinnerCalories cal'),
+                    const SizedBox(height: 8),
+                    GestureDetector(
+                      onTap: addFoodItem,
+                      child: const Text('+ Add food'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  isPlannerMode = !isPlannerMode;
+                });
+              },
+              child: Container(
+                margin: const EdgeInsets.all(16),
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  top: 12,
+                  bottom: 12,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: const Text('Planner Mode',
+                    style: TextStyle(color: Colors.white)),
               ),
             ),
           ],

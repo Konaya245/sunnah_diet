@@ -9,7 +9,12 @@ class HomePage extends StatelessWidget {
       body: Column(
         children: [
           Container(
-            color: Colors.grey,
+            margin: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(8.0),
+            ),
             child: ListTile(
               title: const Text('Calories Remaining'),
               subtitle: const Text('Circular Progress Bar'),
@@ -19,7 +24,12 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Container(
-            color: Colors.grey,
+            margin: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(8.0),
+            ),
             child: ListTile(
               title: const Text('Cups of Water Drunk'),
               subtitle: const Text('Circular Progress Bar'),
@@ -29,7 +39,12 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Container(
-            color: Colors.grey,
+            margin: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(8.0),
+            ),
             child: ListTile(
               title: const Text('Daily Sunnah Food'),
               subtitle: const Text('Random Item'),
@@ -39,7 +54,12 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Container(
-            color: Colors.grey,
+            margin: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(8.0),
+            ),
             child: ListTile(
               title: const Text('Daily Sunnah Habit'),
               subtitle: const Text('Random Item'),

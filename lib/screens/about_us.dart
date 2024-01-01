@@ -10,36 +10,55 @@ class AboutUsPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
         ), // Add padding to the horizontal and vertical edges
-        child: const Column(
+        child: Column(
           children: [
-            Center(
+            const Center(
               child: Text(
-                '\n\nWelcome to the Sunnah Dieting App, your companion in embracing a healthy lifestyle rooted in the teachings of Sunnah. \n\n Our app is dedicated to providing you with a simple yet meaningful experience, guiding you towards a balanced and mindful approach to dieting.\n\n',
+                '\nWelcome to the Sunnah Dieting App, your companion in embracing a healthy lifestyle rooted in the teachings of Sunnah. \n\n Our app is dedicated to providing you with a simple yet meaningful experience, guiding you towards a balanced and mindful approach to dieting.\n',
                 style: TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
               ),
             ),
-            Divider(
+            const Divider(
               color: Colors.green,
             ),
-            Text(
-              '\nSunnah Dieting App\n',
-              style: TextStyle(
-                  fontSize: 30,
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+            Image.asset(
+              'assets/images/logo-slogan.png',
+              width: 220,
+              height: 220,
             ),
-            Divider(
+            const Divider(
               color: Colors.green,
             ),
-            Text(
-              'Nourishing body and soul through Sunnah',
+            const Text(
+              '\nContact Us',
               style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.green,
-                  fontStyle: FontStyle.italic),
-              textAlign: TextAlign.center,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.email_outlined),
+                SizedBox(width: 8),
+                Text(
+                  'zaidi.razak@live.iium.edu.my',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.email_outlined),
+                SizedBox(width: 8),
+                Text(
+                  'mzaidi.ar@gmail.com',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
             ),
           ],
         ),

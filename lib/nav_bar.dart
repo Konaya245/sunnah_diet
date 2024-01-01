@@ -3,10 +3,9 @@ import 'package:sunnah_diet/screens/about_us.dart';
 import 'package:sunnah_diet/screens/food_diary.dart';
 import 'package:sunnah_diet/screens/home_page.dart';
 import 'package:sunnah_diet/screens/report_issue.dart';
-import 'package:sunnah_diet/screens/sunnah_info.dart';
+import 'package:sunnah_diet/screens/sunnah_info/sunnah_info.dart';
 import 'package:sunnah_diet/screens/user_profile.dart';
-import 'package:sunnah_diet/screens/settings.dart';
-import 'package:sunnah_diet/auth.dart';
+import 'package:sunnah_diet/screens//settings/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sunnah_diet/auth.dart';
 
@@ -20,6 +19,8 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   Widget currentScreen = const HomePage();
   String currentScreenTitle = 'Home';
+
+  final User? user = Auth().currentUser;
 
   Future<void> _signOut() async {
     await Auth().signOut();
@@ -37,15 +38,17 @@ class _NavBarState extends State<NavBar> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: const Color(0xFF034620),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: currentScreen,
       drawer: Drawer(
+        backgroundColor: Colors.white,
         child: ListView(
           children: [
             DrawerHeader(
                 decoration: const BoxDecoration(
-                  color: Colors.green,
+                  color: Color(0xFF034620),
                   // image: DecorationImage(
                   //   image: AssetImage('assets/images/logo.png'),
                   //   fit: BoxFit.scaleDown,
@@ -54,27 +57,26 @@ class _NavBarState extends State<NavBar> {
                 child: Column(
                   children: [
                     Container(
-                      height: 60,
-                      width: 60,
+                      height: 70,
+                      width: 70,
                       decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        // image: DecorationImage(
-                        //   image:
-                        //       AssetImage('assets/images/default_profile.png'),
-                        //   fit: BoxFit.contain,
-                        // ),
+                        // shape: BoxShape.circle,
+                        // color: Colors.white,
+                        image: DecorationImage(
+                          image: AssetImage('assets/icon/icon.PNG'),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 4),
                     const Text(
                       'Sunnah Dieting App',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 26,
+                        fontSize: 22,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     GestureDetector(
                       onTap: () {
                         setState(() {
@@ -83,9 +85,9 @@ class _NavBarState extends State<NavBar> {
                         });
                         Navigator.pop(context);
                       },
-                      child: const Text(
-                        'Welcome, User Name',
-                        style: TextStyle(
+                      child: Text(
+                        'Welcome, ${user?.displayName ?? 'User name'}',
+                        style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 16,
                         ),

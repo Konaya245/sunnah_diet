@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class SunnahFoodsPage extends StatelessWidget {
   final List<Map<String, String>> sunnahFoods = [
     {
-      'image': 'assets/images/food1.jpg',
+      'image': 'assets/images/dates.jpg',
       'name': 'Food 1',
       'description': 'Description 1',
     },
     {
-      'image': 'assets/images/food2.jpg',
+      'image': 'assets/images/figs.jpg',
       'name': 'Food 2',
       'description': 'Description 2',
     },
