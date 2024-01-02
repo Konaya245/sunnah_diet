@@ -1,7 +1,7 @@
 // #TODO: figure out how to use these with the variables in the authentication screens
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sunnah_diet/authentication/login_register.dart';
+import 'package:sunnah_diet/views/authentication/login_register.dart';
 
 class LoginWidgets {
   final bool isLogin;

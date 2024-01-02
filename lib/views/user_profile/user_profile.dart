@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sunnah_diet/auth.dart';
+import 'package:sunnah_diet/services/auth.dart';
 
 class UserProfile extends StatelessWidget {
   UserProfile({super.key});

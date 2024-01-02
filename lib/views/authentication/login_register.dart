@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sunnah_diet/auth.dart';
-import 'package:sunnah_diet/authentication/validate.dart';
+import 'package:sunnah_diet/services/auth.dart';
+import 'package:sunnah_diet/utils/validate.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

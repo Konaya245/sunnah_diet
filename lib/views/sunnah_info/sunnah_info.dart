@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sunnah_diet/screens/sunnah_info/sunnah_foods.dart';
-import 'package:sunnah_diet/screens/sunnah_info/sunnah_habits.dart';
+import 'package:sunnah_diet/views/sunnah_info/sunnah_foods.dart';
+import 'package:sunnah_diet/views/sunnah_info/sunnah_habits.dart';
 
 class SunnahInfoPage extends StatelessWidget {
   const SunnahInfoPage({super.key});

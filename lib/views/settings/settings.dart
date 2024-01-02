@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sunnah_diet/screens/settings/privacy_policy.dart';
-import 'package:sunnah_diet/screens/settings/terms_and_conditions.dart';
-import 'package:sunnah_diet/screens/settings/notification.dart';
-import 'package:sunnah_diet/screens/settings/account_management.dart';
+import 'package:sunnah_diet/views/settings/privacy_policy.dart';
+import 'package:sunnah_diet/views/settings/terms_and_conditions.dart';
+import 'package:sunnah_diet/views/settings/notification.dart';
+import 'package:sunnah_diet/views/settings/account_management.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});

@@ -1,9 +1,9 @@
 // Importing necessary packages and files
-import 'package:sunnah_diet/auth.dart';
-import 'package:sunnah_diet/authentication/login_register.dart';
+import 'package:sunnah_diet/services/auth.dart';
+import 'package:sunnah_diet/views/authentication/login_register.dart';
 import 'package:flutter/material.dart';
-import 'package:sunnah_diet/nav_bar.dart';
-import 'package:sunnah_diet/screens/on_boarding/get_started.dart';
+import 'package:sunnah_diet/views/nav_bar.dart';
+import 'package:sunnah_diet/views/on_boarding/get_started.dart';
 
 // Defining a StatefulWidget called WidgetTree
 class WidgetTree extends StatefulWidget {

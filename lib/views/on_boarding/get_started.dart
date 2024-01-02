@@ -1,3 +1,4 @@
+//#TODO make a getstarted thingy
 import 'package:flutter/material.dart';
 
 class GetStartedPage extends StatefulWidget {
