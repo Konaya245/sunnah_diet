@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sunnah_diet/services/auth.dart';
 import 'package:sunnah_diet/utils/validate.dart';
+import 'package:flutter/gestures.dart';
+import 'package:sunnah_diet/views/settings/privacy_policy.dart';
+import 'package:sunnah_diet/views/settings/terms_and_conditions.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -39,7 +42,14 @@ class _LoginPageState extends State<LoginPage> {
       );
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.message;
+        switch (e.code) {
+          case 'invalid-credential':
+            errorMessage = 'Invalid email/password entered. Please try again.';
+            break;
+          default:
+            errorMessage =
+                'An unknown error occurred with error code: ${e.code}.';
+        }
       });
     } finally {
       setState(() {
@@ -61,14 +71,22 @@ class _LoginPageState extends State<LoginPage> {
         password: _passwordController.text,
       );
 
-      User? user = FirebaseAuth.instance.currentUser;
+      User? user = Auth().currentUser;
       if (user != null) {
         await user.updateDisplayName(_displayNameController.text);
         await user.reload();
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.message;
+        switch (e.code) {
+          case 'email-already-in-use':
+            errorMessage =
+                'The account already exists for that email. Login instead.';
+            break;
+          default:
+            errorMessage =
+                'An unknown error occurred with error code: ${e.code}.';
+        }
       });
     } finally {
       setState(() {
@@ -106,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _errorMessage() {
     return Text(
-      errorMessage == '' ? '' : 'Humm ? $errorMessage',
+      errorMessage == '' ? '' : 'Hmm? $errorMessage',
       style: const TextStyle(color: Colors.red),
     );
   }
@@ -267,9 +285,30 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: CheckboxListTile(
-        title: const Text(
-          'I agree to the Terms and Conditions',
-          style: TextStyle(fontSize: 12),
+        title: RichText(
+          text: TextSpan(
+            text: 'I agree to the ',
+            style: const TextStyle(
+                fontSize: 13, color: Colors.black, fontFamily: 'Poppins'),
+            children: [
+              TextSpan(
+                text: 'Terms and Conditions',
+                style: const TextStyle(
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    // Navigation logic goes here
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const TermsAndConditionsPage()),
+                    );
+                  },
+              ),
+            ],
+          ),
         ),
         value: agreeToTerms,
         onChanged: (value) {
@@ -290,9 +329,30 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _privacyPolicyCheckbox() {
     return CheckboxListTile(
-      title: const Text(
-        'I agree to the Privacy Policy',
-        style: TextStyle(fontSize: 12),
+      title: RichText(
+        text: TextSpan(
+          text: 'I agree to the ',
+          style: const TextStyle(
+              fontSize: 13, color: Colors.black, fontFamily: 'Poppins'),
+          children: [
+            TextSpan(
+              text: 'Privacy Policy',
+              style: const TextStyle(
+                color: Colors.blue,
+                decoration: TextDecoration.underline,
+              ),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  // Navigation logic goes here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PrivacyPolicyPage()),
+                  );
+                },
+            ),
+          ],
+        ),
       ),
       value: agreeToPrivacyPolicy,
       onChanged: (value) {
@@ -362,7 +422,10 @@ class _LoginPageState extends State<LoginPage> {
                 if (!isLogin) _termsAndConditionsCheckbox(),
                 if (!isLogin) _privacyPolicyCheckbox(),
                 _errorMessage(),
-                _submitButton(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: _submitButton(),
+                ),
                 if (isLogin) _forgotPasswordButton(),
                 _loginOrRegisterButton(),
               ],

@@ -14,7 +14,9 @@ class _FoodItemAdminState extends State<FoodItemAdmin> {
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
   late TextEditingController _imageController;
-  bool _isSunnahFood = false;
+  late TextEditingController _sourceController;
+  late TextEditingController _sourceInfoController;
+
   DocumentSnapshot?
       _selectedFoodItem; // Added variable to store the selected food item
 
@@ -24,6 +26,8 @@ class _FoodItemAdminState extends State<FoodItemAdmin> {
     _nameController = TextEditingController();
     _descriptionController = TextEditingController();
     _imageController = TextEditingController();
+    _sourceController = TextEditingController();
+    _sourceInfoController = TextEditingController();
   }
 
   @override
@@ -31,16 +35,18 @@ class _FoodItemAdminState extends State<FoodItemAdmin> {
     _nameController.dispose();
     _descriptionController.dispose();
     _imageController.dispose();
+    _sourceController.dispose(); // Add this line
+    _sourceInfoController.dispose();
     super.dispose();
   }
 
   void _addItem() {
     setState(() {
-      _isAddingItem = true;
       _nameController.text = '';
       _descriptionController.text = '';
       _imageController.text = '';
-      _isSunnahFood = false;
+      _sourceController.text = ''; // Add this line
+      _sourceInfoController.text = '';
     });
   }
 
@@ -51,7 +57,8 @@ class _FoodItemAdminState extends State<FoodItemAdmin> {
       _nameController.text = foodItem['name'];
       _descriptionController.text = foodItem['desc'];
       _imageController.text = foodItem['image'];
-      _isSunnahFood = foodItem['isSunnahFood'];
+      _sourceController.text = foodItem['source']; // Add this line
+      _sourceInfoController.text = foodItem['sourceinfo'];
     });
   }
 
@@ -65,7 +72,8 @@ class _FoodItemAdminState extends State<FoodItemAdmin> {
         'name': _nameController.text,
         'desc': _descriptionController.text,
         'image': _imageController.text,
-        'isSunnahFood': _isSunnahFood,
+        'source': _sourceController.text, // Add this line
+        'sourceinfo': _sourceInfoController.text,
       });
     } else {
       // Save the item to Firestore
@@ -73,7 +81,8 @@ class _FoodItemAdminState extends State<FoodItemAdmin> {
         'name': _nameController.text,
         'desc': _descriptionController.text,
         'image': _imageController.text,
-        'isSunnahFood': _isSunnahFood,
+        'source': _sourceController.text, // Add this line
+        'sourceinfo': _sourceInfoController.text,
       });
     }
 
@@ -96,76 +105,128 @@ class _FoodItemAdminState extends State<FoodItemAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Food Items Admin'),
+        title: const Text('Sunnah Foods Admin'),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('food-items').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return const Text('Something went wrong');
-          }
+      body: Column(
+        children: [
+          const SizedBox(height: 10),
+          const ListTile(
+            leading: Icon(Icons.info),
+            title: Text('Long tap on a sunnah food card to edit its contents',
+                style: TextStyle(fontSize: 14)),
+          ),
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('food-items')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return const Text('Something went wrong');
+                }
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-          return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              DocumentSnapshot foodItem = snapshot.data!.docs[index];
-              return Card(
-                margin: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/images/${foodItem['image']}',
-                      width: 200, // Set the desired width
-                      height: 200, // Set the desired height
-                    ),
-                    ListTile(
-                      title: Text(
-                        foodItem['name'],
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0,
+                return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot foodItem = snapshot.data!.docs[index];
+                    return InkWell(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title:
+                                  Text(foodItem['source'] ?? 'Source is empty'),
+                              content: Text(foodItem['sourceinfo'] ??
+                                  'Source info is empty'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('Close'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      onLongPress: () => _editItem(foodItem),
+                      child: Card(
+                        margin: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/${foodItem['image']}',
+                              width: 100, // Set the desired width
+                              height: 100, // Set the desired height
+                              fit: BoxFit.cover,
+                            ),
+                            Expanded(
+                              child: ListTile(
+                                title: Text(
+                                  foodItem['name'],
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  foodItem['desc'],
+                                  style: const TextStyle(
+                                    fontSize: 14.0,
+                                  ),
+                                ),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.delete),
+                                      onPressed: () => _deleteItem(foodItem),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      subtitle: Text(
-                        foodItem['desc'],
-                        style: const TextStyle(
-                          fontSize: 14.0,
-                        ),
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () => _editItem(foodItem),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () => _deleteItem(foodItem),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
-        },
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _addItem();
-          _isAddingItem = true;
+          setState(() {
+            if (_isEditingItem) {
+              _isEditingItem = false;
+            } else {
+              _addItem();
+              _isAddingItem = !_isAddingItem;
+            }
+          });
         },
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+        child: Icon(
+          _isAddingItem || _isEditingItem
+              ? Icons.keyboard_arrow_down_sharp
+              : Icons.add,
+        ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomSheet: _isAddingItem
           ? _buildAddItemForm()
           : _isEditingItem
@@ -197,23 +258,25 @@ class _FoodItemAdminState extends State<FoodItemAdmin> {
               labelText: 'Image',
             ),
           ),
-          Row(
-            children: [
-              Checkbox(
-                value: _isSunnahFood,
-                onChanged: (value) {
-                  setState(() {
-                    _isSunnahFood = value ?? false;
-                  });
-                },
-              ),
-              const Text('Is Sunnah Food'),
-            ],
+          TextField(
+            controller: _sourceController,
+            decoration: const InputDecoration(
+              labelText: 'Source',
+            ),
           ),
+          TextField(
+            controller: _sourceInfoController,
+            decoration: const InputDecoration(
+              labelText: 'Source Info',
+            ),
+          ),
+          const SizedBox(height: 16.0),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF034620)),
             onPressed:
                 _saveItem, // Call _saveItem without passing any arguments
-            child: const Text('Save'),
+            child: const Text('Save', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -243,23 +306,25 @@ class _FoodItemAdminState extends State<FoodItemAdmin> {
               labelText: 'Image',
             ),
           ),
-          Row(
-            children: [
-              Checkbox(
-                value: _isSunnahFood,
-                onChanged: (value) {
-                  setState(() {
-                    _isSunnahFood = value ?? false;
-                  });
-                },
-              ),
-              const Text('Is Sunnah Food'),
-            ],
+          TextField(
+            controller: _sourceController,
+            decoration: const InputDecoration(
+              labelText: 'Source',
+            ),
           ),
+          TextField(
+            controller: _sourceInfoController,
+            decoration: const InputDecoration(
+              labelText: 'Source Info',
+            ),
+          ),
+          const SizedBox(height: 16.0),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF034620)),
             onPressed:
                 _saveItem, // Call _saveItem without passing any arguments
-            child: const Text('Save'),
+            child: const Text('Save', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),

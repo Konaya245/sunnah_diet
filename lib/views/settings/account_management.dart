@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sunnah_diet/services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:csv/csv.dart';
@@ -11,20 +12,25 @@ class AccountManagementPage extends StatelessWidget {
 
   Future<void> changePassword(BuildContext context) async {
     // Get the current user
-    User? user = FirebaseAuth.instance.currentUser;
+    User? user = Auth().currentUser;
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     // Prompt the user to enter a new password
     String? newPassword = await showDialog<String>(
       context: context,
       builder: (BuildContext context) {
+        String? newPassword0;
+
         return AlertDialog(
           title: const Text('Change Password'),
-          content: const TextField(
+          content: TextField(
             obscureText: true,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'New Password',
             ),
+            onChanged: (value) {
+              newPassword0 = value;
+            },
           ),
           actions: [
             TextButton(
@@ -36,7 +42,15 @@ class AccountManagementPage extends StatelessWidget {
             TextButton(
               child: const Text('Save'),
               onPressed: () {
-                Navigator.of(context).pop();
+                if (newPassword0 != null && newPassword0!.length > 6) {
+                  Navigator.of(context).pop(newPassword0);
+                } else {
+                  scaffoldMessenger.showSnackBar(
+                    const SnackBar(
+                        content: Text(
+                            'Password must be at least 6 characters long')),
+                  );
+                }
               },
             ),
           ],
@@ -45,7 +59,7 @@ class AccountManagementPage extends StatelessWidget {
     );
 
     // Update the user's password
-    if (newPassword != null) {
+    if (newPassword != null && newPassword.length > 6) {
       await user?.updatePassword(newPassword);
       // Show a success message
       scaffoldMessenger.showSnackBar(
@@ -56,7 +70,7 @@ class AccountManagementPage extends StatelessWidget {
 
   Future<void> exportData(BuildContext context) async {
     // Get the current user
-    User? user = FirebaseAuth.instance.currentUser;
+    User? user = Auth().currentUser;
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     // Get the user's data from Firestore
@@ -66,11 +80,10 @@ class AccountManagementPage extends StatelessWidget {
         .get();
 
     List<List<dynamic>> csvData = [
-      ['Name', 'Email', 'Age'], // CSV header
+      ['Name', 'Email'], // CSV header
       [
         userData['name'],
         userData['email'],
-        userData['age'],
       ], // User data
     ];
     String csvString = const ListToCsvConverter().convert(csvData);
@@ -94,16 +107,47 @@ class AccountManagementPage extends StatelessWidget {
 
   Future<void> deleteAccount(BuildContext context) async {
     // Get the current user
-    User? user = FirebaseAuth.instance.currentUser;
+    User? user = Auth().currentUser;
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-    // Delete the user's account
-    await user?.delete();
-
-    // Show a success message
-    scaffoldMessenger.showSnackBar(
-      const SnackBar(content: Text('Account deleted successfully')),
+    // Show a confirmation dialog before deleting the account
+    bool? confirmDelete = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Account'),
+          content: const Text('Are you sure you want to delete your account?'),
+          actions: [
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
     );
+
+    // Delete the user's account if confirmed
+    if (confirmDelete == true) {
+      await user?.delete();
+      // Show a success message
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(content: Text('Account deleted successfully')),
+      );
+      // Return to the previous page
+      Navigator.pop(context);
+    }
   }
 
   Future<void> signOut(BuildContext context) async {
@@ -122,6 +166,7 @@ class AccountManagementPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +181,10 @@ class AccountManagementPage extends StatelessWidget {
               ),
             ),
           ),
-          const Divider(),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Divider(),
+          ),
           ListTile(
             title: const Text('Change your password'),
             onTap: () => changePassword(context),
@@ -151,7 +199,10 @@ class AccountManagementPage extends StatelessWidget {
           ),
           ListTile(
             title: const Text('Sign Out'),
-            onTap: () => signOut(context),
+            onTap: () {
+              signOut(context);
+              Navigator.pop(context);
+            },
           ),
         ],
       ),

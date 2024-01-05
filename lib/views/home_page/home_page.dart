@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sunnah_diet/views/food_diary/food_diary.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -17,7 +18,17 @@ class HomePage extends StatelessWidget {
             ),
             child: ListTile(
               title: const Text('Calories Remaining'),
-              subtitle: const Text('Circular Progress Bar'),
+              subtitle: Center(
+                child: SizedBox(
+                  width: 100, // Set the width
+                  height: 100, // Set the height
+                  child: CircularProgressIndicator(
+                    value: progress, // Use the progress value here
+                    color: Colors.green,
+                    backgroundColor: Colors.white,
+                  ),
+                ),
+              ),
               onTap: () {
                 Navigator.pushNamed(context, '/food_diary');
               },

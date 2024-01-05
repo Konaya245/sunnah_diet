@@ -12,41 +12,69 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       body: ListView(
         children: [
-          ListTile(
-            title: const Text('Account Management'),
-            onTap: () {
-              // Navigate to the account management page
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const AccountManagementPage();
-              }));
-            },
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.grey),
+              ),
+            ),
+            child: ListTile(
+              title: const Text('Account Management'),
+              onTap: () {
+                // Navigate to the account management page
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const AccountManagementPage();
+                }));
+              },
+            ),
           ),
-          ListTile(
-            title: const Text('Notification'),
-            onTap: () {
-              // Navigate to the notification page
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const NotificationScreen();
-              }));
-            },
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.grey),
+              ),
+            ),
+            child: ListTile(
+              title: const Text('Notification'),
+              onTap: () {
+                // Navigate to the notification page
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const NotificationScreen();
+                }));
+              },
+            ),
           ),
-          ListTile(
-            title: const Text('Privacy Policy'),
-            onTap: () {
-              // Navigate to the notification page
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const PrivacyPolicyPage();
-              }));
-            },
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.grey),
+              ),
+            ),
+            child: ListTile(
+              title: const Text('Privacy Policy'),
+              onTap: () {
+                // Navigate to the notification page
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const PrivacyPolicyPage();
+                }));
+              },
+            ),
           ),
-          ListTile(
-            title: const Text('Terms and Conditions'),
-            onTap: () {
-              // Navigate to the notification page
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const TermsAndConditionsPage();
-              }));
-            },
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.grey),
+              ),
+            ),
+            child: ListTile(
+              title: const Text('Terms and Conditions'),
+              onTap: () {
+                // Navigate to the notification page
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const TermsAndConditionsPage();
+                }));
+              },
+            ),
           ),
         ],
       ),

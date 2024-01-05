@@ -27,10 +27,12 @@ migrate_working_dir/
 /web/
 /macos/
 /test/
-
 pubspec.lock
 sunnah_diet.iml
 analysis_options.yaml
+
+# Firebase related
+/functions/
 
 # Flutter/Dart/Pub related
 **/doc/api/

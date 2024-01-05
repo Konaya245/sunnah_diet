@@ -18,8 +18,8 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  Widget currentScreen = const HomePage();
-  String currentScreenTitle = 'Home';
+  Widget currentScreen = const FoodDiaryScreen();
+  String currentScreenTitle = 'Food Diary';
   Future<bool>? isAdminFuture;
 
   final Auth auth = Auth();
@@ -67,7 +67,6 @@ class _NavBarState extends State<NavBar> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              backgroundColor: const Color(0xFF034620),
               iconTheme: const IconThemeData(color: Colors.white),
             ),
             body: currentScreen,
@@ -107,7 +106,8 @@ class _NavBarState extends State<NavBar> {
                           ),
                           const SizedBox(height: 2),
                           GestureDetector(
-                            onTap: () {
+                            onTap: () async {
+                              user?.reload();
                               setState(() {
                                 currentScreen = UserProfile();
                                 currentScreenTitle = 'User Profile';
@@ -125,16 +125,27 @@ class _NavBarState extends State<NavBar> {
                         ],
                       )),
                   ListTile(
-                    leading: const Icon(Icons.home),
-                    title: const Text('Home'),
+                    leading: const Icon(Icons.local_dining),
+                    title: const Text('Food Diary'),
                     onTap: () {
                       setState(() {
-                        currentScreen = const HomePage();
-                        currentScreenTitle = 'Home';
+                        currentScreen = const FoodDiaryScreen();
+                        currentScreenTitle = 'Food Diary';
                       });
                       Navigator.pop(context);
                     },
                   ),
+                  // ListTile(
+                  //   leading: const Icon(Icons.home),
+                  //   title: const Text('Home'),
+                  //   onTap: () {
+                  //     setState(() {
+                  //       currentScreen = const HomePage();
+                  //       currentScreenTitle = 'Home';
+                  //     });
+                  //     Navigator.pop(context);
+                  //   },
+                  // ),
                   isAdmin
                       ? ListTile(
                           leading: const Icon(Icons.admin_panel_settings),
@@ -142,7 +153,7 @@ class _NavBarState extends State<NavBar> {
                           onTap: () {
                             setState(() {
                               currentScreen = const AdminDashboardPage();
-                              currentScreenTitle = 'Admin Dashboard';
+                              currentScreenTitle = 'Admin Menu';
                             });
                             Navigator.pop(context);
                           },
@@ -159,17 +170,7 @@ class _NavBarState extends State<NavBar> {
                       Navigator.pop(context);
                     },
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.local_dining),
-                    title: const Text('Food Diary'),
-                    onTap: () {
-                      setState(() {
-                        currentScreen = const FoodDiaryScreen();
-                        currentScreenTitle = 'Food Diary';
-                      });
-                      Navigator.pop(context);
-                    },
-                  ),
+
                   ListTile(
                     leading: const Icon(Icons.local_library),
                     title: const Text('Sunnah Info'),
@@ -198,43 +199,39 @@ class _NavBarState extends State<NavBar> {
                       color: Colors.black38,
                     ),
                   ),
-                  Theme(
-                    data: Theme.of(context)
-                        .copyWith(dividerColor: Colors.transparent),
-                    child: ExpansionTile(
-                      title: const Text('Settings and Support'),
-                      children: <Widget>[
-                        ListTile(
-                          leading: const Icon(Icons.settings),
-                          title: const Text('Settings'),
-                          onTap: () {
-                            setState(() {
-                              currentScreen = const SettingsPage();
-                              currentScreenTitle = 'Settings';
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.bug_report),
-                          title: const Text('Report Issue'),
-                          onTap: () {
-                            setState(() {
-                              currentScreen = const ReportIssuePage();
-                              currentScreenTitle = 'Report Issue';
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.exit_to_app),
-                          title: const Text('Sign Out'),
-                          onTap: () {
-                            _signOut();
-                          },
-                        ),
-                      ],
-                    ),
+                  ExpansionTile(
+                    title: const Text('Settings and Support'),
+                    children: <Widget>[
+                      ListTile(
+                        leading: const Icon(Icons.settings),
+                        title: const Text('Settings'),
+                        onTap: () {
+                          setState(() {
+                            currentScreen = const SettingsPage();
+                            currentScreenTitle = 'Settings';
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.bug_report),
+                        title: const Text('Report Issue'),
+                        onTap: () {
+                          setState(() {
+                            currentScreen = const ReportIssuePage();
+                            currentScreenTitle = 'Report Issue';
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.exit_to_app),
+                        title: const Text('Sign Out'),
+                        onTap: () {
+                          _signOut();
+                        },
+                      ),
+                    ],
                   )
                 ],
               ),

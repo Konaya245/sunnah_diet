@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sunnah_diet/views/widget_tree.dart';
+import 'config/theme.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -9,10 +10,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        fontFamily: 'Poppins',
-      ),
+      theme: SunnahDietTheme.lightTheme,
       home: const WidgetTree(),
     );
   }

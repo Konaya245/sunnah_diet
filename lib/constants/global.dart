@@ -1,0 +1,2 @@
+String currentUserId = '';
+String currentUserName = '';
