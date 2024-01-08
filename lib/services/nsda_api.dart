@@ -5,6 +5,12 @@ import 'package:sunnah_diet/models/search_model.dart';
 import 'package:sunnah_diet/config/env.dart';
 
 Future<FoodSearch> searchFood(String query) async {
+  query = query.trim(); // Remove leading/trailing whitespaces
+
+  if (query.isEmpty) {
+    throw Exception('Search query cannot be empty.');
+  }
+
   final key = Env.instance.fdcApiKey;
   var url = Uri.parse(
       "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=$key&query=$query");

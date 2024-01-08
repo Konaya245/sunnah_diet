@@ -169,6 +169,11 @@ class _FoodItemAdminState extends State<FoodItemAdmin> {
                               width: 100, // Set the desired width
                               height: 100, // Set the desired height
                               fit: BoxFit.cover,
+                              errorBuilder: (BuildContext context,
+                                  Object exception, StackTrace? stackTrace) {
+                                // Return a Text widget if the image doesn't exist
+                                return const Center(child: Text('Null image'));
+                              },
                             ),
                             Expanded(
                               child: ListTile(
@@ -236,97 +241,101 @@ class _FoodItemAdminState extends State<FoodItemAdmin> {
   }
 
   Widget _buildAddItemForm() {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          TextField(
-            controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: 'Name',
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'Name',
+              ),
             ),
-          ),
-          TextField(
-            controller: _descriptionController,
-            decoration: const InputDecoration(
-              labelText: 'Description',
+            TextField(
+              controller: _descriptionController,
+              decoration: const InputDecoration(
+                labelText: 'Description',
+              ),
             ),
-          ),
-          TextField(
-            controller: _imageController,
-            decoration: const InputDecoration(
-              labelText: 'Image',
+            TextField(
+              controller: _imageController,
+              decoration: const InputDecoration(
+                labelText: 'Image',
+              ),
             ),
-          ),
-          TextField(
-            controller: _sourceController,
-            decoration: const InputDecoration(
-              labelText: 'Source',
+            TextField(
+              controller: _sourceController,
+              decoration: const InputDecoration(
+                labelText: 'Source',
+              ),
             ),
-          ),
-          TextField(
-            controller: _sourceInfoController,
-            decoration: const InputDecoration(
-              labelText: 'Source Info',
+            TextField(
+              controller: _sourceInfoController,
+              decoration: const InputDecoration(
+                labelText: 'Source Info',
+              ),
             ),
-          ),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF034620)),
-            onPressed:
-                _saveItem, // Call _saveItem without passing any arguments
-            child: const Text('Save', style: TextStyle(color: Colors.white)),
-          ),
-        ],
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF034620)),
+              onPressed:
+                  _saveItem, // Call _saveItem without passing any arguments
+              child: const Text('Save', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildEditItemForm() {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          TextField(
-            controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: 'Name',
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'Name',
+              ),
             ),
-          ),
-          TextField(
-            controller: _descriptionController,
-            decoration: const InputDecoration(
-              labelText: 'Description',
+            TextField(
+              controller: _descriptionController,
+              decoration: const InputDecoration(
+                labelText: 'Description',
+              ),
             ),
-          ),
-          TextField(
-            controller: _imageController,
-            decoration: const InputDecoration(
-              labelText: 'Image',
+            TextField(
+              controller: _imageController,
+              decoration: const InputDecoration(
+                labelText: 'Image',
+              ),
             ),
-          ),
-          TextField(
-            controller: _sourceController,
-            decoration: const InputDecoration(
-              labelText: 'Source',
+            TextField(
+              controller: _sourceController,
+              decoration: const InputDecoration(
+                labelText: 'Source',
+              ),
             ),
-          ),
-          TextField(
-            controller: _sourceInfoController,
-            decoration: const InputDecoration(
-              labelText: 'Source Info',
+            TextField(
+              controller: _sourceInfoController,
+              decoration: const InputDecoration(
+                labelText: 'Source Info',
+              ),
             ),
-          ),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF034620)),
-            onPressed:
-                _saveItem, // Call _saveItem without passing any arguments
-            child: const Text('Save', style: TextStyle(color: Colors.white)),
-          ),
-        ],
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF034620)),
+              onPressed:
+                  _saveItem, // Call _saveItem without passing any arguments
+              child: const Text('Save', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -21,9 +21,11 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordHidden = true;
   final TextEditingController _displayNameController = TextEditingController();
   final TextEditingController _repeatPasswordController =
       TextEditingController();
+  bool _isConfirmPasswordHidden = true;
   bool agreeToTerms = false;
   bool agreeToPrivacyPolicy = false;
   bool showTermsError = false; // Add showTermsError variable
@@ -109,16 +111,38 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _entryField(String title, TextEditingController controller,
       String? Function(String?)? validator,
-      {bool obscureText =
-          false} // Add closing parenthesis ')' after the default value
-      ) {
+      {bool obscureText = false, bool isConfirmPassword = false}) {
     return TextFormField(
       controller: controller,
+      obscureText: obscureText
+          ? (isConfirmPassword ? _isConfirmPasswordHidden : _isPasswordHidden)
+          : false,
+      validator: validator,
       decoration: InputDecoration(
         labelText: title,
+        suffixIcon: obscureText
+            ? IconButton(
+                icon: Icon(
+                  isConfirmPassword
+                      ? (_isConfirmPasswordHidden
+                          ? Icons.visibility_off
+                          : Icons.visibility)
+                      : (_isPasswordHidden
+                          ? Icons.visibility_off
+                          : Icons.visibility),
+                ),
+                onPressed: () {
+                  setState(() {
+                    if (isConfirmPassword) {
+                      _isConfirmPasswordHidden = !_isConfirmPasswordHidden;
+                    } else {
+                      _isPasswordHidden = !_isPasswordHidden;
+                    }
+                  });
+                },
+              )
+            : null,
       ),
-      validator: validator,
-      obscureText: obscureText, // Set the obscureText property
     );
   }
 
@@ -392,7 +416,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 if (!isLogin)
                   _entryField(
-                    'Display Name',
+                    'Username',
                     _displayNameController,
                     (value) {
                       return validator.validateDisplayName(value, isLogin);
@@ -418,6 +442,7 @@ class _LoginPageState extends State<LoginPage> {
                           value, isLogin, _passwordController.text);
                     },
                     obscureText: true,
+                    isConfirmPassword: true,
                   ),
                 if (!isLogin) _termsAndConditionsCheckbox(),
                 if (!isLogin) _privacyPolicyCheckbox(),

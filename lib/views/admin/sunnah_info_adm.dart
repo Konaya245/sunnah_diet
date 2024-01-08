@@ -108,11 +108,10 @@ class _SunnahInfoAdminState extends State<SunnahInfoAdmin> {
         children: [
           const SizedBox(height: 10),
           const ListTile(
+            leading: Icon(Icons.info),
             title: Text(
-              'These are the some of the eating habits practiced by Muslims around the globe, following the ways of the Prophet Muhammad (PBUH)',
-              style: TextStyle(fontSize: 14),
-              // Set the desired font size for the text
-            ),
+                'Long tap on a sunnah habit card to edit its contents and swipe to delete',
+                style: TextStyle(fontSize: 14)),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
@@ -242,85 +241,89 @@ class _SunnahInfoAdminState extends State<SunnahInfoAdmin> {
   }
 
   Widget _buildAddItemForm() {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          TextField(
-            controller: _titleController,
-            decoration: const InputDecoration(
-              labelText: 'Title',
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _titleController,
+              decoration: const InputDecoration(
+                labelText: 'Title',
+              ),
             ),
-          ),
-          TextField(
-            controller: _descriptionController,
-            decoration: const InputDecoration(
-              labelText: 'Description',
+            TextField(
+              controller: _descriptionController,
+              decoration: const InputDecoration(
+                labelText: 'Description',
+              ),
             ),
-          ),
-          TextField(
-            controller: _sourceController,
-            decoration: const InputDecoration(
-              labelText: 'Source',
+            TextField(
+              controller: _sourceController,
+              decoration: const InputDecoration(
+                labelText: 'Source',
+              ),
             ),
-          ),
-          TextField(
-            controller: _sourceInfoController,
-            decoration: const InputDecoration(
-              labelText: 'Source Info',
+            TextField(
+              controller: _sourceInfoController,
+              decoration: const InputDecoration(
+                labelText: 'Source Info',
+              ),
             ),
-          ),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF034620)),
-            onPressed:
-                _saveItem, // Call _saveItem without passing any arguments
-            child: const Text('Save', style: TextStyle(color: Colors.white)),
-          ),
-        ],
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF034620)),
+              onPressed:
+                  _saveItem, // Call _saveItem without passing any arguments
+              child: const Text('Save', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildEditItemForm() {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          TextField(
-            controller: _titleController,
-            decoration: const InputDecoration(
-              labelText: 'Title',
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _titleController,
+              decoration: const InputDecoration(
+                labelText: 'Title',
+              ),
             ),
-          ),
-          TextField(
-            controller: _descriptionController,
-            decoration: const InputDecoration(
-              labelText: 'Description',
+            TextField(
+              controller: _descriptionController,
+              decoration: const InputDecoration(
+                labelText: 'Description',
+              ),
             ),
-          ),
-          TextField(
-            controller: _sourceController,
-            decoration: const InputDecoration(
-              labelText: 'Source',
+            TextField(
+              controller: _sourceController,
+              decoration: const InputDecoration(
+                labelText: 'Source',
+              ),
             ),
-          ),
-          TextField(
-            controller: _sourceInfoController,
-            decoration: const InputDecoration(
-              labelText: 'Source Info',
+            TextField(
+              controller: _sourceInfoController,
+              decoration: const InputDecoration(
+                labelText: 'Source Info',
+              ),
             ),
-          ),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF034620)),
-            onPressed:
-                _saveItem, // Call _saveItem without passing any arguments
-            child: const Text('Save', style: TextStyle(color: Colors.white)),
-          ),
-        ],
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF034620)),
+              onPressed:
+                  _saveItem, // Call _saveItem without passing any arguments
+              child: const Text('Save', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        ),
       ),
     );
   }

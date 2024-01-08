@@ -84,45 +84,77 @@ class _FoodDiaryScreenState extends State<FoodDiaryScreen> {
                         ),
                       );
                     } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      return ListView.separated(
-                        itemCount: snapshot.data?.foods?.length ?? 0,
-                        separatorBuilder: (context, index) =>
-                            const Divider(color: Colors.grey),
-                        itemBuilder: (context, index) {
-                          if (dataTypeEnumValues.reverse[
-                                      snapshot.data!.foods![index].dataType] ==
-                                  "Experimental" ||
-                              dataTypeEnumValues.reverse[
-                                      snapshot.data!.foods![index].dataType] ==
-                                  "SR Legacy" ||
-                              dataTypeEnumValues.reverse[
-                                      snapshot.data!.foods![index].dataType] ==
-                                  null) {
-                            return Container(); // or any other widget you prefer
-                          } else {
-                            return ListTile(
-                              title: Text(
-                                  snapshot.data!.foods![index].description ??
-                                      ''),
-                              subtitle: Text(
-                                  snapshot.data!.foods![index].brandName ?? ''),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => FoodDetailPage(
-                                      food: snapshot.data!.foods![index],
-                                      currentMeal: currentMeal,
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                        },
+                      return const Center(
+                        child: Text('An error occurred. Please try again.'),
                       );
+                    } else {
+                      if (snapshot.data?.foods?.isEmpty ?? true) {
+                        return const Center(
+                          child: Text(
+                              'No results found. Please enter a valid search term.'),
+                        );
+                      } else {
+                        return ListView.separated(
+                          itemCount: snapshot.data?.foods?.length ?? 0,
+                          separatorBuilder: (context, index) {
+                            if (index < snapshot.data!.foods!.length - 1 &&
+                                (dataTypeEnumValues.reverse[snapshot.data!.foods![index].dataType] ==
+                                        "Experimental" ||
+                                    dataTypeEnumValues.reverse[snapshot.data!.foods![index].dataType] ==
+                                        "SR Legacy" ||
+                                    dataTypeEnumValues.reverse[snapshot
+                                            .data!.foods![index].dataType] ==
+                                        null ||
+                                    dataTypeEnumValues.reverse[snapshot.data!
+                                            .foods![index + 1].dataType] ==
+                                        "Experimental" ||
+                                    dataTypeEnumValues.reverse[snapshot.data!
+                                            .foods![index + 1].dataType] ==
+                                        "SR Legacy" ||
+                                    dataTypeEnumValues.reverse[snapshot.data!
+                                            .foods![index + 1].dataType] ==
+                                        null)) {
+                              return Container();
+                            } else {
+                              return const Divider(color: Colors.grey);
+                            }
+                          },
+                          itemBuilder: (context, index) {
+                            if (dataTypeEnumValues.reverse[snapshot
+                                        .data!.foods![index].dataType] ==
+                                    "Experimental" ||
+                                dataTypeEnumValues.reverse[snapshot
+                                        .data!.foods![index].dataType] ==
+                                    "SR Legacy" ||
+                                dataTypeEnumValues.reverse[snapshot
+                                        .data!.foods![index].dataType] ==
+                                    null) {
+                              return Container(); // or any other widget you prefer
+                            } else {
+                              return ListTile(
+                                title: Text(
+                                    snapshot.data!.foods![index].description ??
+                                        ''),
+                                subtitle: Text(
+                                    snapshot.data!.foods![index].brandName ??
+                                        ''),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => FoodDetailPage(
+                                        food: snapshot.data!.foods![index],
+                                        currentMeal: currentMeal,
+                                        selectedDate: selectedDate,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          },
+                        );
+                      }
                     }
                   },
                 ),
@@ -139,6 +171,7 @@ class _FoodDiaryScreenState extends State<FoodDiaryScreen> {
   void selectDate(DateTime date) {
     setState(() {
       selectedDate = date;
+      //doesn't consider the calories of selected date
     });
   }
 
@@ -462,11 +495,18 @@ class _FoodDiaryScreenState extends State<FoodDiaryScreen> {
         // Filter the documents by userId, dateTime, and mealTime
         var documents = snapshot.data!.docs.where((doc) {
           var data = doc.data() as Map<String, dynamic>;
-          return data['userId'] == currentUserId &&
-              data['dateTime'].toDate().day == selectedDate.day &&
-              data['dateTime'].toDate().month == selectedDate.month &&
-              data['dateTime'].toDate().year == selectedDate.year &&
-              data['mealTime'] == mealTime;
+          if (data['dateTime'] != null) {
+            var docDate = data['dateTime'].toDate();
+            var docDateOnly =
+                DateTime(docDate.year, docDate.month, docDate.day);
+            var selectedDateOnly = DateTime(
+                selectedDate.year, selectedDate.month, selectedDate.day);
+            return data['userId'] == currentUserId &&
+                docDateOnly == selectedDateOnly &&
+                data['mealTime'] == mealTime;
+          } else {
+            return false;
+          }
         }).toList();
 
         // Calculate the total calories for the given meal time
@@ -499,12 +539,14 @@ class _FoodDiaryScreenState extends State<FoodDiaryScreen> {
                 key: Key(doc.id),
                 onDismissed: (direction) {
                   setState(() {
+                    var dismissedItemCalories =
+                        (data['calories'] as num).round();
                     if (mealTime == 'breakfast') {
-                      breakfastCalories -= totalCalories;
+                      breakfastCalories -= dismissedItemCalories;
                     } else if (mealTime == 'lunch') {
-                      lunchCalories -= totalCalories;
+                      lunchCalories -= dismissedItemCalories;
                     } else if (mealTime == 'dinner') {
-                      dinnerCalories -= totalCalories;
+                      dinnerCalories -= dismissedItemCalories;
                     }
                   });
                   FirebaseFirestore.instance
@@ -525,17 +567,21 @@ class _FoodDiaryScreenState extends State<FoodDiaryScreen> {
                   //   );
                   // },
                   child: ListTile(
-                    title: Text(
-                      '${data['foodName']} ${(data['brandName'] ?? '').isEmpty ? '' : '(${data['brandName']})'}',
-                      style: const TextStyle(fontSize: 14),
-                    ), // Display the brand name along with the food name
-                    leading: data['isSunnahFood']
-                        ? const Icon(
+                    title: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Text(
+                          '${data['foodName']} ${(data['brandName'] ?? '').isEmpty ? '' : '(${data['brandName']})'}',
+                          style: const TextStyle(fontSize: 14),
+                        ), // Display the brand name along with the food name
+                        if (data['isSunnahFood'] == true)
+                          const Icon(
                             Icons.star,
                             color: Colors.green,
-                            size: 24,
-                          )
-                        : null,
+                            size: 20, // Adjust the size as needed
+                          ),
+                      ],
+                    ),
                     trailing: Text('${data['calories']} kcal'),
                   ),
                 ),

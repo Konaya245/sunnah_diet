@@ -9,9 +9,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FoodDetailPage extends StatefulWidget {
   final Food food;
   final String currentMeal;
+  final DateTime selectedDate;
 
   const FoodDetailPage(
-      {super.key, required this.food, required this.currentMeal});
+      {super.key,
+      required this.food,
+      required this.currentMeal,
+      required this.selectedDate});
 
   @override
   State<FoodDetailPage> createState() => _FoodDetailPageState();
@@ -80,8 +84,8 @@ class _FoodDetailPageState extends State<FoodDetailPage> {
                 bool isSunnahFood = sunnahFoods.any((food) =>
                     widget.food.description!.toLowerCase().contains(food));
 
-                // Get the current date and time
-                DateTime now = DateTime.now();
+                // Get the selected date
+                DateTime selectedDate = widget.selectedDate;
 
                 // Save the data to Firestore
                 await FirebaseFirestore.instance.collection('user_diary').add({
@@ -90,7 +94,7 @@ class _FoodDetailPageState extends State<FoodDetailPage> {
                   'foodName': widget.food.description,
                   'brandName': widget.food.brandName,
                   'calories': calories,
-                  'dateTime': now,
+                  'dateTime': selectedDate,
                   'mealTime': widget.currentMeal,
                   'isSunnahFood': isSunnahFood,
                 });
@@ -104,6 +108,7 @@ class _FoodDetailPageState extends State<FoodDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPageLoaded = false;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Food Details'),
@@ -128,6 +133,7 @@ class _FoodDetailPageState extends State<FoodDetailPage> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
+                  isPageLoaded = true;
                   return Column(
                     children: [
                       ListTile(
@@ -183,7 +189,30 @@ class _FoodDetailPageState extends State<FoodDetailPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: addFoodToDiary,
+        onPressed: () {
+          if (!isPageLoaded) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Warning'),
+                  content: const Text(
+                      'The page has not fully loaded yet. Please wait.'),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          } else {
+            addFoodToDiary();
+          }
+        },
         child: const Icon(Icons.add),
       ),
     );

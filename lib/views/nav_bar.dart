@@ -33,7 +33,11 @@ class _NavBarState extends State<NavBar> {
   }
 
   Future<void> _signOut() async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     await auth.signOut();
+    scaffoldMessenger.showSnackBar(
+      const SnackBar(content: Text('Signed out successfully')),
+    );
   }
 
   @override
