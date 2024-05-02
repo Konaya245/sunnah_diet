@@ -20,9 +20,6 @@ Lacking:
 https://drive.google.com/drive/folders/1zgEDlWms-cXUkMfj6NlmXDNwLuNRp8vG?usp=sharing
 
 ## How to run
-1. Download flutter.
-2. flutter create sunnah_diet
-3. Download project files using git pull or github desktop.
-4. flutter pub get
-5. flutter pub upgrade
-6. flutter run 
+1. Configure your own firebase auth and storage and place API in the api location.
+2. Get API from USDA FDC and place the api.
+3. flutter run
