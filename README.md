@@ -17,3 +17,11 @@ Lacking:
 
 ## Documentation and others: 
 https://drive.google.com/drive/folders/1zgEDlWms-cXUkMfj6NlmXDNwLuNRp8vG?usp=sharing
+
+## How to run
+1. Download flutter.
+2. flutter create sunnah_diet
+3. Download project files using git pull or github desktop.
+4. flutter pub get
+5. flutter pub upgrade
+6. flutter run 
