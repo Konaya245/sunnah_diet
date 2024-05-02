@@ -16,7 +16,7 @@ Lacking:
 - Notifications not fully functional
 - Diet tracker certain actions not refreshing
 
-## Documentation and others: 
+## Documentation, poster and pictures: 
 https://drive.google.com/drive/folders/1zgEDlWms-cXUkMfj6NlmXDNwLuNRp8vG?usp=sharing
 
 ## How to run
